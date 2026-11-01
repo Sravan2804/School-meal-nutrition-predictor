@@ -2,7 +2,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Framework Streamlit](https://img.shields.io/badge/framework-Streamlit-FF4B4B.svg)](https://streamlit.io/)
-[![Vision Model OWL-ViT](https://img.shields.io/badge/model-Google%20OWL--ViT%20(ViT--B%2F32)-8A2BE2.svg)](https://huggingface.co/google/owlvit-base-patch32)
+[![Vision Model OWL-ViT](<https://img.shields.io/badge/model-Google%20OWL--ViT%20(ViT--B%2F32)-8A2BE2.svg>)](https://huggingface.co/google/owlvit-base-patch32)
 [![Standards HSE Aligned](https://img.shields.io/badge/standards-Irish%20HSE%20%26%20School%20Food%20Policy-059669.svg)](https://www.hse.ie)
 [![License MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -17,6 +17,7 @@ By pairing Google's **OWL-ViT (Open-Vocabulary Object Detection with Vision Tran
 Universal hot school meal programmes play a vital role in child development, cognitive performance, and public health. However, ensuring nutritional quality control across hundreds of decentralized school kitchens currently relies on sporadic spot checks or manual paper logs.
 
 **NutriTray AI** bridges the gap between vision AI and dietary auditing:
+
 - **Zero-Shot Generalization**: Identifies un-trained dishes and cafeteria items on the fly using natural-language prompt embeddings rather than requiring costly re-training for every menu change.
 - **Robust Portion Modeling**: Anchors volumetric serving calculations to verified dietitian reference weights with bounded geometric damping, preventing camera distance and tray angle from distorting caloric counts.
 - **Automated Regulatory Compliance**: Real-time evaluation against Primary (ages 5–11) and Post-Primary (ages 12–18) nutritional benchmarks, covering caloric allowances, protein density, sodium ceilings, free sugars, and mandatory EU FIC 1169/2011 allergen warnings.
@@ -69,17 +70,20 @@ Universal hot school meal programmes play a vital role in child development, cog
 ## 🔬 Core Technical Innovations
 
 ### 1. Open-Vocabulary Zero-Shot Detection
+
 Traditional object detectors (e.g., YOLOv8, Faster R-CNN) are constrained to closed label sets determined at training time. School cafeteria menus change seasonally, making static detectors fragile.
 
-NutriTray AI uses **Google OWL-ViT** (`google/owlvit-base-patch32`), which projects visual image patches and text embeddings into a shared multimodal latent space. 
+NutriTray AI uses **Google OWL-ViT** (`google/owlvit-base-patch32`), which projects visual image patches and text embeddings into a shared multimodal latent space.
 
 > **Prompt Engineering Insight:** CLIP-style vision-language models demonstrate poor zero-shot discrimination with single-word prompts (e.g., `apple` vs `quesadilla`). NutriTray AI utilizes expanded descriptive queries:
+>
 > - `"half of a sandwich with visible filling"` (avoids confusion with plain bread slices)
 > - `"a flat rectangular slice of sandwich bread"`
 > - `"small orange baby carrots"`
 > - `"fresh red strawberries"`
 
 ### 2. Perspective-Damped Portion Modeling
+
 Estimating portion weight strictly from 2D bounding-box area relative to image dimensions produces severe artifacts: moving the camera closer or tilting the tray inflates estimated calories even when physical food quantity is unchanged.
 
 NutriTray AI anchors serving weight to a verified reference baseline (`typical_weight_g`) in `nutrition_db.json`, using the detected bounding-box area ratio only to apply a bounded adjustment factor ($0.6\times$ to $1.4\times$):
@@ -89,19 +93,21 @@ $$\text{Estimated Weight} = W_{\text{typical}} \times \mathrm{clamp}\left(\frac{
 This provides stable nutritional predictions across different smartphone cameras and cafeteria lighting setups, while still allowing a visibly larger serving to appropriately register higher grams.
 
 ### 3. Standards-Aligned Compliance Framework
+
 Nutrient benchmarks are configured according to **Irish Health Service Executive (HSE)** School Food Policy and National Guidelines:
 
-| Nutrient Metric | Primary School (Ages 5–11) | Post-Primary School (Ages 12–18) | Regulatory Purpose |
-|:---|:---:|:---:|:---|
-| **Energy Target** | 500 kcal (450 – 575 range) | 650 kcal (585 – 745 range) | Prevents under-nourishment & excess energy |
-| **Minimum Protein** | $\ge 15.0$ g | $\ge 22.0$ g | Muscle synthesis & growth (12–20% of energy) |
-| **Target Carbs** | $\approx 65.0$ g | $\approx 85.0$ g | Sustained cognitive energy |
-| **Fat Ceiling** | $\le 15.0$ g | $\le 20.0$ g | Restricts saturated fats to $<35\%$ of calories |
-| **Dietary Fiber** | $\ge 4.0$ g | $\ge 6.0$ g | Promotes whole grains, fruits & vegetables |
-| **Sodium Ceiling** | $\le 400.0$ mg | $\le 500.0$ mg | Cardiovascular health protection |
-| **Free Sugar Limit** | $\le 10.0$ g | $\le 12.0$ g | WHO dental and metabolic guidelines |
+| Nutrient Metric      | Primary School (Ages 5–11) | Post-Primary School (Ages 12–18) | Regulatory Purpose                              |
+| :------------------- | :------------------------: | :------------------------------: | :---------------------------------------------- |
+| **Energy Target**    | 500 kcal (450 – 575 range) |    650 kcal (585 – 745 range)    | Prevents under-nourishment & excess energy      |
+| **Minimum Protein**  |        $\ge 15.0$ g        |           $\ge 22.0$ g           | Muscle synthesis & growth (12–20% of energy)    |
+| **Target Carbs**     |      $\approx 65.0$ g      |         $\approx 85.0$ g         | Sustained cognitive energy                      |
+| **Fat Ceiling**      |        $\le 15.0$ g        |           $\le 20.0$ g           | Restricts saturated fats to $<35\%$ of calories |
+| **Dietary Fiber**    |        $\ge 4.0$ g         |           $\ge 6.0$ g            | Promotes whole grains, fruits & vegetables      |
+| **Sodium Ceiling**   |       $\le 400.0$ mg       |          $\le 500.0$ mg          | Cardiovascular health protection                |
+| **Free Sugar Limit** |        $\le 10.0$ g        |           $\le 12.0$ g           | WHO dental and metabolic guidelines             |
 
 ### 4. Food Allergen Management (EU FIC 1169/2011)
+
 School caterers are legally required to declare major allergens. Every database food item is tagged with allergen metadata (Gluten, Dairy, Eggs, Sesame, etc.). The dashboard flags detected allergens prominently to ensure student safety before meal distribution.
 
 ---
@@ -147,10 +153,12 @@ The web dashboard is organized into four purpose-built clinical views:
 ## ⚡ Getting Started
 
 ### Prerequisites
+
 - Python 3.10 – 3.14
 - CUDA-compatible GPU (optional; CPU inference runs in ~2–4 seconds per tray)
 
 ### 1. Clone Repository & Setup Virtual Environment
+
 ```bash
 git clone https://github.com/your-username/school-meal-nutrition-predictor.git
 cd "school-meal-nutrition-predictor"
@@ -166,14 +174,17 @@ source .venv/bin/activate
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3. Launch the Application
+
 ```bash
 streamlit run app.py
 ```
+
 Open your browser at `http://localhost:8501`.
 
 > **Note on Model Weights:** The application uses `google/owlvit-base-patch32` (~600 MB). The model weights are automatically cached locally in `~/.cache/huggingface/` on first run. Subsequent launches execute entirely offline with zero network requests.
@@ -202,6 +213,7 @@ To add regional dishes, hot entrees, or cafeteria-specific recipes, append an en
 ```
 
 Then add the corresponding descriptive query in `PROMPT_TEXT` within `app.py`:
+
 ```python
 "lentil soup": "a bowl of warm orange-red lentil soup",
 ```
