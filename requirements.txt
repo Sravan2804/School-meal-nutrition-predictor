@@ -1,6 +1,8 @@
-streamlit
-pandas
-Pillow
-ultralytics
-opencv-python
-numpy
+streamlit>=1.30.0
+torch>=2.0.0
+torchvision>=0.15.0
+transformers>=4.35.0
+pillow>=10.0.0
+pandas>=2.0.0
+plotly>=5.18.0
+numpy>=1.24.0
